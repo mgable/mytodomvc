@@ -1,0 +1,9 @@
+node_modules
+.tmp
+.sass-cache
+dist
+bower_components
+/app/styles/*.css
+*.zip
+*.7z
+*.map
