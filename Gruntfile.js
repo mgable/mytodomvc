@@ -386,6 +386,22 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    protractor: {
+        options: {
+            keepAlive: false, // If false, the grunt process stops when the test fails.
+            noColor: false, // If true, protractor will not use colors in its output.
+            args: {}
+        },
+        all: {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
+            options: {
+                configFile: "protractor.config.js", // Target-specific config file
+                args: {
+                    params: {}
+                } // Target-specific arguments
+            }
+        }
     }
   });
 
