@@ -1,5 +1,7 @@
 The Todos application should:
 	enter a todo
+		- input field is present
+		- input field is not read-only
 	save a todo
 	delete a todo
 	delete all completed todos
