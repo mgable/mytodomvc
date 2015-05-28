@@ -1,0 +1,12 @@
+The Todos application should:
+
+	save a todo
+	delete a todo
+	delete all completed todos
+	edit a todo
+	toggle to "complete" attribute of a todo
+	mark all todos as "complete"
+	display the number of "active" todos
+	display "active" todos
+	display "completed" todos
+	display all todos

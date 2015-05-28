@@ -13,7 +13,7 @@ exports.config = {
   },
    onPrepare: function() {
       var SpecReporter = require('jasmine-spec-reporter'),
-          Reporter = require("./test/e2e/next_gen_protractor_reporter.js")
+          Reporter = require("./test/e2e/custom_protractor_reporter.js")
       jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: false, customProcessors: [Reporter]}));
    }
 };
