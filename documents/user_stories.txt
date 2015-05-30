@@ -1,16 +1,23 @@
 The Todos application should:
 	enter a todo
 		- input field is present
-		- input field is not read-only
+		- input field accepts user input
 	save a todo
-		- moves the new todo into the todo list
+		- moves a new todo into the last index position of the todo list
 		- clears the input field
 	delete a todo
 		- removes a todo from the todo list
 	delete all completed todos
+		- removes all "completed" todos from the todo list 
 	edit a todo
+		- RETURN keypress updates todo with input field text
+		- ESC keypress reverts the input field to unmodified value
 	toggle the "complete" attribute of an individual todo
+		- mark an "active" todo as "complete"
+		- mark a "complete" todo as "active"
 	toggle the "complete" attribute of all todos
+		- mark all todos as "complete" if there is at least one "active" todo
+		- mark all todos as "active" if all todos are "completed"
 	display the number of "active" todos
 	display "active" todos
 	display "completed" todos
