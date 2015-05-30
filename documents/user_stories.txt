@@ -3,7 +3,10 @@ The Todos application should:
 		- input field is present
 		- input field is not read-only
 	save a todo
+		- moves the new todo into the todo list
+		- clears the input field
 	delete a todo
+		- removes a todo from the todo list
 	delete all completed todos
 	edit a todo
 	toggle the "complete" attribute of an individual todo

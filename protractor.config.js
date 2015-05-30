@@ -6,6 +6,8 @@ exports.config = {
   },
   framework: 'jasmine',
   allScriptsTimeout: 60000,
+  
+  baseUrl: "http://localhost:9000/#",
   jasmineNodeOpts: {
     defaultTimeoutInterval: 360000,
     includeStackTrace: false,
