@@ -3,7 +3,7 @@
 beforeEach(
 	function(){
 		browser.driver.manage().window().setSize(1280, 1024);
-		browser.get("/");
+		browser.get("http://todomvc.com/examples/angularjs/#/");
 	}
 );
 
@@ -61,13 +61,11 @@ describe("Todo MVC", function(){
 				element(by.css("#toggle-all")).click();
 				if (currentCount === completeCount){
 					// all todos completed
-					console.info("all todos completed");
 					element.all(by.css(".completed")).count().then(function(completeCount){
 						expect(completeCount).toEqual(0);
 					});
 				} else {
 					// not all todos completed
-					console.info("some todos are active");
 					element.all(by.css(".completed")).count().then(function(completeCount){
 						expect(completeCount).toEqual(currentCount);
 					});
@@ -137,7 +135,8 @@ describe("Todo MVC", function(){
 
 	xit("should delete all completed todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
-			firstTodo = todos.first();
+			firstTodo = todos.first(),
+			inputField = element(by.model("newTodo"));
 
 		todos.count().then(function(count){
 			if (count){
@@ -148,13 +147,40 @@ describe("Todo MVC", function(){
 						}
 					});
 				}).then(function(){
+					element(by.css("#clear-completed")).isDisplayed().then(function(isDisplayed){
+						expect(isDisplayed).toBeTruthy()
+					});
+
 					element(by.css("#clear-completed")).click();
 					todos.count().then(function(count){
 						expect(count).toBe(0);
 					});
+
+					element(by.css("#clear-completed")).isDisplayed().then(function(isDisplayed){
+						expect(isDisplayed).toBeFalsy()
+					});
 				});
 			} else {
-			 	console.info("no todos to delete")
+
+				element(by.css("#clear-completed")).isDisplayed().then(function(isDisplayed){
+					expect(isDisplayed).toBeFalsy()
+				});
+
+			 	inputField.sendKeys("write a new review");
+				inputField.sendKeys(protractor.Key.ENTER);
+				inputField.sendKeys("write a new review");
+				inputField.sendKeys(protractor.Key.ENTER);
+				inputField.sendKeys("write a new review");
+				inputField.sendKeys(protractor.Key.ENTER);
+
+				todos.each(function(todo){
+					todo.element(by.css("input.toggle")).click();
+				});
+
+				element(by.css("#clear-completed")).click();
+				todos.count().then(function(count){
+					expect(count).toBe(0);
+				});
 			}
 		});
 	});
@@ -217,7 +243,7 @@ describe("Todo MVC", function(){
 		});
 	});
 
-	it("should filter by 'active' todos", function(){
+	xit("should filter by 'active' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
@@ -283,7 +309,73 @@ describe("Todo MVC", function(){
 			});
 		});
 	});
+	
+	xit("should filter by 'completed' todos", function(){
+		var todos = element.all(by.repeater("todo in todos")),
+			firstTodo = todos.first(),
+			inputField = element(by.model("newTodo"));
 
+		todos.count().then(function(count){
+			if (count){
+				todos.each(function(todo){
+					hasClass(todo, "completed").then(function(isCompleted){
+						if (!isCompleted){
+							todo.element(by.css("input.toggle")).click();
+						}
+					});
+				}).then(function(){
+					element(by.css("#clear-completed")).click();
+				});
+			} 
+
+			todos.count().then(function(count){
+				expect(count).toBe(0);
+			});
+
+			expect(element(by.css("#todo-count")).isDisplayed()).toBeFalsy();
+
+			inputField.sendKeys("write a new review");
+			inputField.sendKeys(protractor.Key.ENTER);
+
+			todos.count().then(function(count){
+				expect(count).toBe(1);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			inputField.sendKeys("write a new review");
+			inputField.sendKeys(protractor.Key.ENTER);
+
+			todos.count().then(function(count){
+				expect(count).toBe(2);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(2);
+			});
+
+			todos.first().element(by.css("input.toggle")).click();
+			todos.count().then(function(count){
+				expect(count).toBe(2);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			element(by.cssContainingText('#filters li a', 'Completed')).click();
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			todos.count().then(function(count){
+				expect(count).toBe(1);
+			});
+		});
+	});
 })
 
 		
