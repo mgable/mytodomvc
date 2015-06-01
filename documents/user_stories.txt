@@ -27,4 +27,6 @@ The Todos application should:
 	filter by "active" todos
 		- display only "active" todos
 	filter by "completed" todos
+		- display only "completed" todos
 	display "all" todos
+		- ?

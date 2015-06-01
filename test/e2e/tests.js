@@ -217,7 +217,7 @@ describe("Todo MVC", function(){
 		});
 	});
 
-	it("should filter by 'active' todos", function(){
+	xit("should filter by 'active' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
@@ -283,7 +283,73 @@ describe("Todo MVC", function(){
 			});
 		});
 	});
+	
+	xit("should filter by 'completed' todos", function(){
+		var todos = element.all(by.repeater("todo in todos")),
+			firstTodo = todos.first(),
+			inputField = element(by.model("newTodo"));
 
+		todos.count().then(function(count){
+			if (count){
+				todos.each(function(todo){
+					hasClass(todo, "completed").then(function(isCompleted){
+						if (!isCompleted){
+							todo.element(by.css("input.toggle")).click();
+						}
+					});
+				}).then(function(){
+					element(by.css("#clear-completed")).click();
+				});
+			} 
+
+			todos.count().then(function(count){
+				expect(count).toBe(0);
+			});
+
+			expect(element(by.css("#todo-count")).isDisplayed()).toBeFalsy();
+
+			inputField.sendKeys("write a new review");
+			inputField.sendKeys(protractor.Key.ENTER);
+
+			todos.count().then(function(count){
+				expect(count).toBe(1);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			inputField.sendKeys("write a new review");
+			inputField.sendKeys(protractor.Key.ENTER);
+
+			todos.count().then(function(count){
+				expect(count).toBe(2);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(2);
+			});
+
+			todos.first().element(by.css("input.toggle")).click();
+			todos.count().then(function(count){
+				expect(count).toBe(2);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			element(by.cssContainingText('#filters li a', 'Completed')).click();
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			todos.count().then(function(count){
+				expect(count).toBe(1);
+			});
+		});
+	});
 })
 
 		
