@@ -76,6 +76,43 @@ describe("Todo MVC", function(){
 		});
 	});
 
+	it("should edit a todo", function(){
+		var todos = element.all(by.repeater("todo in todos")), 
+			firstTodo = todos.first(),
+			firstTodoInput = firstTodo.element(by.css("label")),
+			title;
+
+		todos.count().then(function(count){
+			if (count){
+				firstTodoInput.getText().then(function(text){
+					title = text;
+
+					browser.actions().doubleClick(firstTodo).perform();
+					hasClass(firstTodo,"editing").then(function(hasClass){
+						expect(hasClass).toBe(true);
+					});
+
+					browser.actions().sendKeys(" -xxx").perform();
+					browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
+					firstTodoInput.getText().then(function(text){
+						expect(text).toEqual(title);
+					});
+
+					browser.actions().doubleClick(firstTodo).perform();
+					browser.actions().sendKeys(" -new").perform();
+					browser.actions().sendKeys(protractor.Key.ENTER).perform();
+					firstTodoInput.getText().then(function(newTitle){
+						expect(newTitle).toEqual(title + " -new");
+					});
+
+				});
+			} else {
+				console.info("there are no todos");
+			}
+		});
+
+	});
+
 	it("should delete a todo", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			originalTodos;
@@ -96,6 +133,30 @@ describe("Todo MVC", function(){
 			}).then(function(modifiedTodos){
 				expect(originalTodos).toMatch(modifiedTodos);
 			});
+		});
+	});
+
+	it("should delete all completed todos", function(){
+		var todos = element.all(by.repeater("todo in todos")),
+			firstTodo = todos.first();
+
+		todos.count().then(function(count){
+			if (count){
+				todos.each(function(todo){
+					hasClass(todo, "completed").then(function(isCompleted){
+						if (!isCompleted){
+							todo.element(by.css("input.toggle")).click();
+						}
+					});
+				}).then(function(){
+					element(by.css("#clear-completed")).click();
+					todos.count().then(function(count){
+						expect(count).toBe(0);
+					});
+				});
+			} else {
+			 	console.info("no todos to delete")
+			}
 		});
 	});
 })

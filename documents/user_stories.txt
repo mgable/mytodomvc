@@ -10,6 +10,7 @@ The Todos application should:
 	delete all completed todos
 		- removes all "completed" todos from the todo list 
 	edit a todo
+		- double-click a todo to edit
 		- RETURN keypress updates todo with input field text
 		- ESC keypress reverts the input field to unmodified value
 	toggle the "complete" attribute of an individual todo
