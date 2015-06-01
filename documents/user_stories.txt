@@ -20,6 +20,11 @@ The Todos application should:
 		- mark all todos as "complete" if there is at least one "active" todo
 		- mark all todos as "active" if all todos are "completed"
 	display the number of "active" todos
-	display "active" todos
-	display "completed" todos
+		- todo-count displays number of "active" todos
+			- hide todo-count when there are no todos
+			- a todo should be "active" when first created
+			- a todo should not "active" when marked "completed"
+	filter by "active" todos
+		- display only "active" todos
+	filter by "completed" todos
 	display "all" todos
