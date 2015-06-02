@@ -1,33 +1,36 @@
 The Todos application should:
-	enter a todo
-		- input field is present
-		- input field accepts user input
-	save a todo
-		- moves a new todo into the last index position of the todo list
-		- clears the input field
-	delete a todo
-		- removes a todo from the todo list
-	delete all completed todos
-		- remove button is visible when todo list contains "completed" todos
-		- removes all "completed" todos from the todo list 
-	edit a todo
-		- double-click a todo to edit
-		- RETURN keypress updates todo with input field text
-		- ESC keypress reverts the input field to unmodified value
-	toggle the "complete" attribute of an individual todo
-		- mark an "active" todo as "complete"
-		- mark a "complete" todo as "active"
-	toggle the "complete" attribute of all todos
-		- mark all todos as "complete" if there is at least one "active" todo
-		- mark all todos as "active" if all todos are "completed"
-	display the number of "active" todos
-		- todo-count displays number of "active" todos
-			- hide todo-count when there are no todos
-			- a todo should be "active" when first created
-			- a todo should not "active" when marked "completed"
-	filter by "active" todos
-		- display only "active" todos
-	filter by "completed" todos
-		- display only "completed" todos
-	display "all" todos
-		- ?
+	1.0) enter a todo
+		- 1.1 input field is present
+		- 1.2 input field accepts user input
+	2.0) save a todo
+		- 2.1 moves a new todo into the last index position of the todo list
+		- 2.2 clears the input field
+	3.0) edit a todo
+		- 3.1 double-click a todo to edit
+		- 3.2 ESC keypress reverts the input field to unmodified value
+		- 3.3 RETURN keypress updates todo with input field text
+	4.0) toggle the "complete" attribute of an individual todo
+		- 4.1 mark an "active" todo as "complete"
+		- 4.2 mark a "complete" todo as "active"
+	5.0) toggle the "complete" attribute of all todos
+		- 5.1 mark all todos as "complete" if there is at least one "active" todo
+		- 5.2 mark all todos as "active" if all todos are "completed"
+	6.0) delete a todo
+		- 6.1 removes a todo from the todo list
+	7.0) delete all completed todos
+		- 7.1 remove button is visible when todo list contains "completed" todos
+		- 7.2 remove button is not visible when todo list contains "completed" todos
+		- 7.3 removes all "completed" todos from the todo list 
+	8.0) display the number of "active" todos
+		- 8.1 hide todo-count when there are no todos
+		- 8.2 todo-count displays number of "active" todos
+		- 8.3 a todo should be "active" when first created
+		- 8.4 a todo should not "active" when marked "completed"
+	9.0) filter by "active" todos
+		- 9.1 todo-count displays number of "active" todos
+		- 9.2 display only "active" todos
+	10.0) filter by "completed" todos
+		- 10.1 todo-count displays number of "completed" todos
+		- 10.2 display only "completed" todos
+	11.0) display "all" todos
+		- 11.1 ?
