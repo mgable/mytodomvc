@@ -241,7 +241,10 @@ describe("Todo MVC", function(){
 		});
 	});
 
+<<<<<<< HEAD
 	//9.0
+=======
+>>>>>>> 55581c242ebf2ea4ffabb6b0ea7a589e94b0e591
 	xit("should filter by 'active' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
@@ -318,6 +321,76 @@ describe("Todo MVC", function(){
 			});
 		});
 	});
+<<<<<<< HEAD
+=======
+	
+	xit("should filter by 'completed' todos", function(){
+		var todos = element.all(by.repeater("todo in todos")),
+			firstTodo = todos.first(),
+			inputField = element(by.model("newTodo"));
+
+		todos.count().then(function(count){
+			if (count){
+				todos.each(function(todo){
+					hasClass(todo, "completed").then(function(isCompleted){
+						if (!isCompleted){
+							todo.element(by.css("input.toggle")).click();
+						}
+					});
+				}).then(function(){
+					element(by.css("#clear-completed")).click();
+				});
+			} 
+
+			todos.count().then(function(count){
+				expect(count).toBe(0);
+			});
+
+			expect(element(by.css("#todo-count")).isDisplayed()).toBeFalsy();
+
+			inputField.sendKeys("write a new review");
+			inputField.sendKeys(protractor.Key.ENTER);
+
+			todos.count().then(function(count){
+				expect(count).toBe(1);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			inputField.sendKeys("write a new review");
+			inputField.sendKeys(protractor.Key.ENTER);
+
+			todos.count().then(function(count){
+				expect(count).toBe(2);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(2);
+			});
+
+			todos.first().element(by.css("input.toggle")).click();
+			todos.count().then(function(count){
+				expect(count).toBe(2);
+			});
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			element(by.cssContainingText('#filters li a', 'Completed')).click();
+
+			element(by.css("#todo-count")).getText().then(function(text){
+				expect(parseInt(text)).toBe(1);
+			});
+
+			todos.count().then(function(count){
+				expect(count).toBe(1);
+			});
+		});
+	});
+>>>>>>> 55581c242ebf2ea4ffabb6b0ea7a589e94b0e591
 })
 
 		
