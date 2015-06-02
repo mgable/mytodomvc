@@ -1,0 +1,199 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;}
+\margl1440\margr1440\vieww15420\viewh19160\viewkind0
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\b\fs24 \cf0 OUTLINE\
+\
+Audience:\
+
+\b0 The intended audience of this report is mid to senior level developers, QA and product managers.
+\b \
+
+\b0 \
+
+\b What this report is about:
+\b0 \
+This report is an exploration of writing Scenario (AKA End-to-End) tests for an Angular application (SPA) using Protractor.js. The primary focus is not installing, setting up or learning Protractor.js; there are plenty of tutorials which cover that subject extensively. Nor is the report about the tests themselves, although that is covered. I want to present an overview of the strategies behind writing a suite of tests which gives the most appropriate coverage to your application. \
+\
+
+\b What is end to end testing:
+\b0 \
+
+\i\b \cf2 \cb3 End-to-end testing
+\b0  
+\i0 (E2E) is a technique used to test whether the user interaction for a specific task from start to finish is behaving as expected. More specifically, it tests an application\'92s behavior, as directed by a set of instructions, as if a user was interacting with the application directly themselves. Generally the tests would never interact with the application code, relying on the UI for all feedback.\
+\
+This differs from 
+\i\b Unit Testing 
+\i0\b0 in unit tests work directly with the code itself and not through the user interface. Unit test are low level, operating on smallest unit, looking for issues in the code itself. E2E testing is not interested in the code at all but the outcome of user actions.	\cf0 \cb1 \
+\
+
+\b Types of E2E tests:
+\b0 \
+When designing an overall E2E test strategy it is useful to think of the different facets of the UI and the possible user interactions with it. For example any given workflow can be tested in multiple ways, primarily we can test the following:\
+	- rendering\
+	- behavioral\
+	- data\
+	- performance\
+\
+For example, lets take a simple case of an SPA which has a drop down menu. We can test it for rendering - did it render the correct label (or other markup)? We can test it for behavior - does it expand when clicked, and highlight on hover, etc? We can testing if for data - does it contain the correct items? And we can test if for performance - does it render within acceptable limits. \
+\
+Rendering tests are very straight forward in the simply test for the existence of a static element on the page. The test are easy to write and will not be covered in this report. \
+\
+Behavioral tests are much more complex as they can have data dependencies and involve state. In devising an E2E testing strategy, these two issues (state and data) need to be addressed and handled in a uniform way. Behavior tests are what this report will be focusing on.\
+\
+Data tests can be very problematic if you can not get direct access to the data source. How do we know if the drop down has the correct items if we can not compare the output of the drop down to its data source? Writing data tests has its own unique set of issues and will be covered in another report.\
+\
+Because \'93performance\'94 is very subjective, to start performance testing, first there needs to be requirements on what the expectation on time limits should be for any given task. These times will very depending on a complex set of factors and will be different for each test. Determining the performance requirements is a nontrivial task in its own right and will be covered in another report.\
+\
+
+\b Approaches to E2E testing\
+
+\b0 No suite of tests will cover every possible exception, however a proper strategy will help shape the nature of the tests for the best coverage possible. The best place to start is the user stories or functional requirements for the application to be tests. Good user tests should map directly to good E2E tests. \
+\
+Lets take the example of a simple form which queries the user for a \'93name\'94. \
+\
+The rendering tests are simple are are typical based on the design comp: is the input field displayed? Is the label for the input field displayed?\
+\
+The behavior tests are more complex and based on the user stories, which for the example are:\
+\
+When the submit button is pressed\
+ 	1) the name is required\
+	2) the name must have a minimum of two characters\
+	3) the name has a maximum of 256 characters\
+	4) the name can not have the following characters: \\ / ? : * \
+	5) the name has to be unique within the system\
+	6) the name is submitted to the server\
+\
+The first five of these tests are very straight forward behavioral tests. However, #5 and #6 sounds like a data test (or at least involves application data) in how will we know if a a name is unique if we do not know all of the names in which to compare it and for #6, the only way to know the name was submitted is to query the server (or data store) and find out.\
+\
+Working with application data can be problematic for several reasons. First, the tests may not have access to the data store, browser local and session storage is private, for instance. For this reason I would avoid combining data tests with behavior tests. So then how do we deal with questions 5 and 6? Obviously the user stories are just a description of what is required, not a prescription on how to do it. If we think in prescriptive terms in the way the applications works we can write all tests as behavior tests, abet with some gaps in coverage. In other words, write down what is the actual manifestation of the behavior is in some kind of testable way.\
+\
+So our lets modified our users stories slightly by expanding upon them with the actual implementation details\
+	1) the name is required\
+		- the submit button is disabled when the name field is empty\
+	2) the name must have a minimum of two characters\
+		- the submit button is disabled if the name is less than two characters\
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 	3) the name has a maximum of 256 characters\
+		- the submit button is disabled if the name is more than 256 characters\
+	4) the name can not have the following characters: \\ / ? : * \
+		- the submit button is disabled if it contains any of the restricted characters\
+	5) the name has to be unique within the system\
+		- enter a unique name\
+		- the submit button is disabled if the same unique name is entered again\
+	6) the name is submitted to the server\
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 		- if a name passes all the above tests, the submit button is enabled\
+\
+So you can see it is possible to rewrite all tests to be behavior tests. Obviously, there is a gap of coverage in #6 in we are not truly able to know if the data was capture by the server. However those data tests should be performed separately from the behavior tests, in that they have different requirements to execute.\
+\
+Another point to note, #5 creates data and therefore modifies the state of the application. Handling data and state are two very important concerns which should be decided on before starting to write tests. Can (should) tests create their own data? Sometimes this question will be answer for you in the application can not be polluted with test data. If this is the case, I would strongly suggest getting a separate test instance of the app, server and data store for testing only. However, depending on many enterprise level details, this might not be possible: the data base is just too big or the app build and deploy process does not support a QA instance. Barring a QA instance, it is possible to have a HTTP client like Charles, block all data changing calls and route them somewhere else to test. \
+\
+Changing the applications data also changes its state. You might have an application that has an initial state and has behavior unique to that initial state. Once the application is tested, that initial state is changed and therefore the behavior is changed as well. For example, an application when first used has a set up workflow and once that is completed, it will never show up again. If your tests are not state aware and are always expecting (or not expecting) a set up workflow they are all going to fail.\
+\
+	- assumptions about application state and data\
+	- test coverage\
+	- mapping functional specs or user stories to E2E \
+	- handling data\
+		- tests that make data\
+		- tests that rely on data made by other tests\
+			- make executing tests individually problematic\
+			- if those tests fail, tests which rely on those test will fail\
+			- start to combine tests into compound test which makes trouble-shooting difficult\
+	- handling state\
+		- tests change state\
+\
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\b \cf0 What is Protractor
+\b0 \
+	- based on Jasmine\
+	- syntax\
+		- describe\
+		- it\
+		- expect\
+	- hooks to Angular\
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+
+\b The test example: TODO MVC
+\b0 \
+To more throughly explore the concepts in this report, lets actually develop and write E2E tests for a real web application. The Angular version TODO MVC project makes an excellent test case - {\field{\*\fldinst{HYPERLINK "http://todomvc.com/examples/angularjs/#/"}}{\fldrslt http://todomvc.com/examples/angularjs/#/}}\
+	\
+
+\b The tests
+\b0 \
+Using the Angular TODO application as the test case, lets determine what behavior should be tested. The development cycle of most products probably includes the product manager writing out users stories or product functional specifications. If those exist, use them. If not, back into them by writing them yourself. \
+\
+The Todos application should:\
+	- enter a todo\
+	- save a todo\
+	- edit a todo\
+	- toggle the "complete" attribute of an individual todo\
+	- toggle the "complete" attribute of all todos\
+	- delete a todo\
+	- delete all completed todos\
+	- display the number of "active" todos\
+	- filter "active" todos\
+	- filter "completed" todos\
+	- display "all" todos\
+\
+Obviously this is just descriptive behavior, lets fill it in with the prescriptive details on what constitutes a test for the behavior. Also lets add a numbering system to help organize things.\
+\
+The Todos application should:\
+1.0 enter a todo\
+	1.1 input field is present\
+	1.2 input field accepts user input\
+2.0 save a todo\
+	2.1 places a new todo into the last index position of the todo list\
+	2.2 clears the input field\
+3.0 edit a todo\
+	3.1 double-click a todo to edit\
+	3.2 ESC keypress reverts the input field to unmodified value\
+	3.3 RETURN keypress updates todo with input field text\
+4.0 toggle the "complete" attribute of an individual todo\
+	4.1 mark an "active" todo as "complete"\
+	4.2 mark a "complete" todo as "active"\
+5.0 toggle the "complete" attribute of all todos\
+	5.1 mark all todos as "complete" if there is at least one "active" todo\
+	5.2 mark all todos as "active" if all todos are "completed"\
+6.0 delete a todo\
+	6.1 removes a todo from the todo list\
+7.0 delete all completed todos\
+	7.1 remove button is visible when todo list contains "completed" todos\
+	7.2 remove button is not visible when todo list contains "completed" todos\
+	7.3 removes all "completed" todos from the todo list \
+8.0 display the number of "active" todos\
+	8.1 hide todo-count when there are no todos\
+	8.2 todo-count displays number of "active" todos\
+	8.3 a todo should be "active" when first created\
+	8.4 a todo should not "active" when marked "completed"\
+9.0 filter "active" todos\
+	9.1 todo-count displays number of "active" todos\
+	9.2 display only "active" todos\
+10.0 filter "completed" todos\
+	10.1 todo-count displays number of "completed" todos\
+	10.2 display only "completed" todos\
+11.0  display "all" todos\
+	11.1 ?\
+\
+Determining the correct granularity for the tests can be challenging. I would suggest writing out every step possible and then combining tests as duplications in the actual implementation arise. Notice most of the stories have multiple criteria for success. We will see how this works perfectly with Protractor / Jasmine syntax to write tests.\
+\
+Because the implementation of the Angular TODO MVC we are testing against uses local storage and that is problematic to get at, no data tests can be conducted. When designing tests this fact is of paramount concern. How much coverage can be had with only behavior tests - a lot but not all. So what do we do about tests which need specific data, such as 6.0? If there are no todos to delete, how can a delete test be performed? The answer is the test must create a todo so it can then delete it. The same is true for most of the tests, they need some data to work on and at the launch of the application we have no idea whether or not any todos are available to test against.\
+\
+One note of caution about tests creating data - each test should create the data that specific test needs and not rely on a prior test creating that data. For instance, a clever programmer might see that test 1.0 creates the todo, 2.0 saves the todo, 3.0 can edit that same todo. Test 4.0 and 6.0 can also work on that same todo. Except if test 1.0 fails and does not create the necessary todo, then depending if there is another todo already in the list, all of those subsequent tests which depend on the todo will also fail whether their implemented behavior actually works or not. Another reason not to let tests create data for other tests is the ability to execute a single test is limited. Using the example, lets say we let test 1.0 create the todo which will be used in tests 2.0, 3.0, 4.0, 6.0 and so on. If one of the tests fail you must rerun them all adding to the time it takes to execute. If each test stands alone, you can run that single test, making trouble shooting much easier and faster.\
+\
+Aside from data, application state is another concern. What state will the application be in when tested and how will the tests alter that state. The state of the Angular TODO MVC is determined by the number of \'93todos\'94 and the individual state of each \'93todo\'94. Since testing will add, edit and delete todos, the tests will be altering the state of the application. Does this matter? Yes and no. Yes - it matters because any state change has the potential to alter a test; and no - it does not matter because we can write our tests in a way to minimize or negate state issues.\
+\
+Unlike unit tests which can be used to develop an application using BDD or TDD, any good E2E test writing should not involve having to change application code and happens after development when the UI is stable. It may be possible to use E2E tests in a TDD or BDD environment however because Protractor depends heavily on selectors, which are completely UI based, any changes to the UI no matter how subtle have the potential to break tests. Because of this dependency on the UI, E2E tests can be very brittle.\
+\
+
+\b Refactoring the tests
+\b0 \
+	- modularize the tests\
+		- selector file\
+		- functions file\
+	- before each}
