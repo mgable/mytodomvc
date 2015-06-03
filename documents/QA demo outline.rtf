@@ -1,6 +1,6 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red255\green255\blue255;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;}
 \margl1440\margr1440\vieww15420\viewh19160\viewkind0
 \pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
@@ -21,13 +21,13 @@ This report is an exploration of writing Scenario (AKA End-to-End) tests for an 
 \b What is end to end testing:
 \b0 \
 
-\i\b \cf2 \cb3 End-to-end testing
+\i\b \cf2 End-to-end testing
 \b0  
 \i0 (E2E) is a technique used to test whether the user interaction for a specific task from start to finish is behaving as expected. More specifically, it tests an application\'92s behavior, as directed by a set of instructions, as if a user was interacting with the application directly themselves. Generally the tests would never interact with the application code, relying on the UI for all feedback.\
 \
 This differs from 
 \i\b Unit Testing 
-\i0\b0 in unit tests work directly with the code itself and not through the user interface. Unit test are low level, operating on smallest unit, looking for issues in the code itself. E2E testing is not interested in the code at all but the outcome of user actions.	\cf0 \cb1 \
+\i0\b0 in unit tests work directly with the code itself and not through the user interface. Unit test are low level, operating on smallest unit, looking for issues in the code itself. E2E testing is not interested in the code at all but the outcome of user actions.	\cf0 \
 \
 
 \b Types of E2E tests:
@@ -67,7 +67,7 @@ When the submit button is pressed\
 	5) the name has to be unique within the system\
 	6) the name is submitted to the server\
 \
-The first five of these tests are very straight forward behavioral tests. However, #5 and #6 sounds like a data test (or at least involves application data) in how will we know if a a name is unique if we do not know all of the names in which to compare it and for #6, the only way to know the name was submitted is to query the server (or data store) and find out.\
+The first five of these tests are very straight forward behavioral tests. However, #5 and #6 sounds like a data tests (or at least involves application data) in how will the test know if a a name is unique if we do not know all of the names in which to compare and for #6, the only way to know the name was submitted is to query the server (or data store) and find out if the name is there.\
 \
 Working with application data can be problematic for several reasons. First, the tests may not have access to the data store, browser local and session storage is private, for instance. For this reason I would avoid combining data tests with behavior tests. So then how do we deal with questions 5 and 6? Obviously the user stories are just a description of what is required, not a prescription on how to do it. If we think in prescriptive terms in the way the applications works we can write all tests as behavior tests, abet with some gaps in coverage. In other words, write down what is the actual manifestation of the behavior is in some kind of testable way.\
 \
@@ -76,8 +76,7 @@ So our lets modified our users stories slightly by expanding upon them with the 
 		- the submit button is disabled when the name field is empty\
 	2) the name must have a minimum of two characters\
 		- the submit button is disabled if the name is less than two characters\
-\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 	3) the name has a maximum of 256 characters\
+	3) the name has a maximum of 256 characters\
 		- the submit button is disabled if the name is more than 256 characters\
 	4) the name can not have the following characters: \\ / ? : * \
 		- the submit button is disabled if it contains any of the restricted characters\
@@ -85,14 +84,15 @@ So our lets modified our users stories slightly by expanding upon them with the 
 		- enter a unique name\
 		- the submit button is disabled if the same unique name is entered again\
 	6) the name is submitted to the server\
-\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 		- if a name passes all the above tests, the submit button is enabled\
+		- if a name passes all the above tests, the submit button is enabled\
 \
 So you can see it is possible to rewrite all tests to be behavior tests. Obviously, there is a gap of coverage in #6 in we are not truly able to know if the data was capture by the server. However those data tests should be performed separately from the behavior tests, in that they have different requirements to execute.\
 \
 Another point to note, #5 creates data and therefore modifies the state of the application. Handling data and state are two very important concerns which should be decided on before starting to write tests. Can (should) tests create their own data? Sometimes this question will be answer for you in the application can not be polluted with test data. If this is the case, I would strongly suggest getting a separate test instance of the app, server and data store for testing only. However, depending on many enterprise level details, this might not be possible: the data base is just too big or the app build and deploy process does not support a QA instance. Barring a QA instance, it is possible to have a HTTP client like Charles, block all data changing calls and route them somewhere else to test. \
 \
 Changing the applications data also changes its state. You might have an application that has an initial state and has behavior unique to that initial state. Once the application is tested, that initial state is changed and therefore the behavior is changed as well. For example, an application when first used has a set up workflow and once that is completed, it will never show up again. If your tests are not state aware and are always expecting (or not expecting) a set up workflow they are all going to fail.\
+\
+**********\
 \
 	- assumptions about application state and data\
 	- test coverage\
@@ -106,9 +106,18 @@ Changing the applications data also changes its state. You might have an applica
 	- handling state\
 		- tests change state\
 \
-\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b \cf0 What is Protractor
+\b What is Protractor\
+
+\b0 Protractor is an end-to-end test framework for AngularJS applications (although it can be used for non-Angular applications as well). Protractor runs tests against your application running in a real browser, interacting with it as a user would.\
+\
+Protractor tests are written as a series of instructions which tell the browser to do tasks just like a human user would - click here, enter text there, click again, scroll down, wait, go to a new page, etc. Any behavior a human can input into the browser, so can a Protractor E2E test.\
+\
+Protractor tests are written using Jasmine syntax and connects to the browser using Selenium\'92s Webdriver.js. Jasmine is a javascript unit testing framework which has a clean syntax so you can easily write tests.\
+\
+Jasmine generalized format is to describe the test or what we are testing; defined the specifications; then test the expectation. For example consider the drop down menu. The description would be \'93the drop down menu\'94, a specification would be it \'93should expand when clicked\'94; and the expectation is when the element is clicked it expands. It is the expectation which needs the most interpretation - what does it mean for a drop down menu to be \'93expanded\'94. Typically and expanded menu has an additional class applied to it which it would not have in its collapsed state. The test can check for this additional class, however this does not tell us if the menu is actually expanded. A more precise test would be to determine if the elements of the expanded drop down menu are actually visible (displayed) on the page. However this solution is not without its issues either. Application state or data issues might effect the items which are suppose to be in the drop down making it impossible to know what should be displayed. For example, a drop down might be populated with user entered data, and the application in its initial state does not have that data so the drop down is not populated. After data is entered the drop down is further populated making its exact contents depend on application data. And, as we know data tests have their own issues.
+\b \
+
 \b0 \
 	- based on Jasmine\
 	- syntax\
@@ -116,8 +125,7 @@ Changing the applications data also changes its state. You might have an applica
 		- it\
 		- expect\
 	- hooks to Angular\
-\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
-\cf0 \
+\
 
 \b The test example: TODO MVC
 \b0 \
