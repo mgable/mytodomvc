@@ -40,13 +40,26 @@ When designing an overall E2E test strategy it is useful to think of the differe
 \
 For example, lets take a simple case of an SPA which consists of a drop down menu. We can test it for rendering - did it render the correct label and form field (or other markup); we can test it for behavior - does the menu expand when clicked, and highlight on hover, etc; we can test it for data - does it contain the correct menu items; and we can test if for performance - does it render within acceptable limits. \
 \
-Rendering tests if a element render on the page. Rendering tests are very straight forward in the simply test for the existence of a static element on the page. The test are easy to write and will not be covered in this report. \
+Rendering tests if a static element rendered on the page. Rendering tests are very straight forward in the simply test for the existence of a static element on the page. The test are easy to write and will not be covered in this report. \
 \
 Behavioral tests if the element behaves in the intended way. Behavioral tests are much more complex as they can have data dependencies and involve state. In devising an E2E testing strategy, these two issues (state and data) need to be addressed and handled in a uniform way. Behavior tests are what this report will be focusing on.\
 \
 Data tests if the rendered data correct. Data tests can be very problematic if you can not get direct access to the data source. How do we know if the drop down has the correct items if we can not compare the output of the drop down to its data source? Writing data tests has its own unique set of issues and will be covered in another report.\
 \
 Performance tests if the response times are within acceptable limits. Because \'93performance\'94 is subjective, to start performance testing expectations on time limits for any given task need to be established. These times might very depending on a complex set of factors and will be different for each test. Determining the performance requirements is a nontrivial task and is beyond the scope of this report.\
+\
+
+\b What is Protractor.js\
+
+\b0 Protractor is an end-to-end test framework for AngularJS applications (although it can be used for non-Angular applications as well). Protractor runs tests against your application running in a real browser, interacting with it as a user would.\
+\
+Protractor tests are written as a series of instructions which tell the browser to do tasks just like a human user would - click here, enter text there, click again, scroll down, wait, go to a new page, etc. Any behavior a human can input into the browser, so can a Protractor E2E test.\
+\
+Protractor tests are written using Jasmine syntax and connects to the browser using Selenium\'92s Webdriver.js. Jasmine is a javascript unit testing framework which has a clean syntax so you can easily write tests. To be able to write Protractor tests you must understand Jasmine.\
+\
+Jasmine generalized format is to describe the test; define the specifications; then test the expectation. For example consider the drop down menu. The description would be \'93the drop down menu\'94, a specification would be it \'93should expand when clicked\'94; and the expectation is when the element is clicked it expands. It is the expectation which needs the most interpretation - what does it mean for a drop down menu to be \'93expanded\'94. Typically an expanded menu has an additional class applied to it which it would not have in its collapsed state. The test can check for this additional class, however this does not tell us if the menu is actually expanded. A more precise test would be to determine if the elements of the expanded drop down menu are actually visible (displayed) on the page. However this solution is not without its issues either. Application state or data issues might effect the items contained in the drop down making it impossible to know what should be displayed. For example, a drop down might be populated with user entered data, and the application in its initial state does not have that data so the drop down is not populated. After data is entered the drop down is further populated making its exact contents depend on application data. And, as we know data tests have their own issues.\
+\
+One other important consideration is since all browser operations are asynchronous, Protractor and Jasmine rely completely on the Promise interface for communications. This can add an additional level of complexity as asynchronous programming can be tricky.\
 \
 
 \b E2E testing strategies:\
@@ -97,19 +110,6 @@ Another point to note, 5 creates data and therefore modifies the state of the ap
 Changing the application\'92s data also changes its state. You might have an application that has an initial state and has behavior unique to that  state. Once the application is tested, that initial state is changed and therefore the behavior is changed as well. For example, an application when first used has a set up workflow and once that is completed, it will never show up again. If the tests are not state aware and are always expecting (or not expecting) a set up workflow, those tests will fail.\
 \
 It is critical to make your tests state aware, but what to do about an application which may be in any state when tested. If there is not a way to reset the application to the same state each time it is tested, and it is possible for the for tests to change state and data, you can pre configure the application to a known state before starting the tests. Extending the above example, say the application is taking in a list of names and when tested it is not known if any names have currently been entered and this effects the initial state of the application. If we always delete all names prior to testing we always know no names have currently been entered and therefore insuring a consistent initial state.\
-\
-
-\b What is Protractor.js\
-
-\b0 Protractor is an end-to-end test framework for AngularJS applications (although it can be used for non-Angular applications as well). Protractor runs tests against your application running in a real browser, interacting with it as a user would.\
-\
-Protractor tests are written as a series of instructions which tell the browser to do tasks just like a human user would - click here, enter text there, click again, scroll down, wait, go to a new page, etc. Any behavior a human can input into the browser, so can a Protractor E2E test.\
-\
-Protractor tests are written using Jasmine syntax and connects to the browser using Selenium\'92s Webdriver.js. Jasmine is a javascript unit testing framework which has a clean syntax so you can easily write tests. To be able to write Protractor tests you must understand Jasmine.\
-\
-Jasmine generalized format is to describe the test; define the specifications; then test the expectation. For example consider the drop down menu. The description would be \'93the drop down menu\'94, a specification would be it \'93should expand when clicked\'94; and the expectation is when the element is clicked it expands. It is the expectation which needs the most interpretation - what does it mean for a drop down menu to be \'93expanded\'94. Typically an expanded menu has an additional class applied to it which it would not have in its collapsed state. The test can check for this additional class, however this does not tell us if the menu is actually expanded. A more precise test would be to determine if the elements of the expanded drop down menu are actually visible (displayed) on the page. However this solution is not without its issues either. Application state or data issues might effect the items contained in the drop down making it impossible to know what should be displayed. For example, a drop down might be populated with user entered data, and the application in its initial state does not have that data so the drop down is not populated. After data is entered the drop down is further populated making its exact contents depend on application data. And, as we know data tests have their own issues.\
-\
-One other important consideration is since all browser operations are asynchronous, Protractor and Jasmine rely completely on the Promise interface for communications. This can add an additional level of complexity as asynchronous programming can be tricky.\
 \
 
 \b The test application: TODO MVC

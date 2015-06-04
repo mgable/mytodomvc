@@ -32,6 +32,9 @@
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
+		<style>
+			ol ul li {font-size:75% !important; color: red;}
+		</style>
 	</head>
 
 	<body>
@@ -80,6 +83,21 @@
 				</section>
 
 				<section>
+					<h2>What is Protractor.js</h2>
+					<ul>
+						<li>built on Selenium / Webdriver</li>
+						<li>uses Jasmine syntax</li>
+						<li>based on asynchronous programming model</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>Developing a E2E testing strategy</h2>
+						<ul>
+							<li>determine aspects of behavior to test</li>
+						</ul>
+					</section>
 					<section>
 						<h2>Types of E2E testing</h2>
 						<ul>
@@ -91,42 +109,78 @@
 					</section>
 					<section>
 						<h2>Render Tests</h2>
+						<p>if a element rendered on the page</p>
 						<img src="./img/render.png" />
 					</section>
 					<section>
 						<h2>Behavior Tests</h2>
+						<p>if the element behaves in the intended way</p>
 						<img src="./img/behavior.png" />
 					</section>
 					<section>
 						<h2>Data Tests</h2>
+						<p>if the rendered data correct</p>
 						<img src="./img/data.png" />
 					</section>
 					<section>
 						<h2>Performance Tests</h2>
+						<p>if the response times are within acceptable limits</p>
 						<img src="./img/performance.png" />
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Developing a E2E testing strategy</h2>
+						<ul>
+							<li>determine aspects of behavior to test</li>
+							<li>write tests based on functional specifications</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Functional Specifications</h2>
+						<img src="./img/name.png"/>
+						<p style="text-align:left">When the submit button is pressed</p>
+						<ol style="font-size:smaller">
+						 	<li>the name is required</li>
+							<li>the name must have a minimum of two characters</li>
+							<li>the name has a maximum of 256 characters</li>
+							<li>the name can not have the following characters: \ / ? : * </li>
+							<li>the name has to be unique within the system</li>
+							<li>the name is submitted to the server</li>
+						</ol>
+					</section>
+					<section>
+						<h2>Functional Specifications interpreted</h2>
+						<ol style="font-size:smaller">
+							<li>the name is required
+								<ul><li>the submit button is disabled when the name field is empty</li></ul></li>
+							<li>the name must have a minimum of two characters
+								<ul><li>he submit button is disabled if the name is less than two characters</li></ul></li>
+							<li>he name has a maximum of 256 characters
+								<ul><li>the submit button is disabled if the name is more than 256 characters</li></ul></li>
+							<li>the name can not have the following characters: \ / ? : * 
+								<ul><li>the submit button is disabled if it contains any of the restricted characters</li></ul></li>
+							<li>the name has to be unique within the system
+								<ul><li>enter a unique name
+									<li>the submit button is disabled if the same unique name is entered again</li></ul></li>
+							<li>the name is submitted to the server
+								<ul><li>if a name passes all the above tests, the submit button is enabled</li></ul></li>
+						</ol>
 					</section>
 				</section>
 
 				<section>
 					<h2>Developing a E2E testing strategy</h2>
 					<ul>
-						<li class="fragment">determine aspects of behavior to test</li>
-						<li class="fragment">write tests based on functional specifications</li>
-						<li class="fragment">strive for an application which is always in an uniform starting state</li>
-						<li class="fragment">write tests to make data then needed</li>
+						<li>determine aspects of behavior to test</li>
+						<li>write tests based on functional specifications</li>
+						<li>strive for an application which is always in an uniform starting state</li>
+						<li class="fragment">write tests to make data when needed</li>
 						<li class="fragment">write tests to stand alone</li>
 						<li class="fragment">determine how much coverage is acceptable</li>
 						<li class="fragment">determine gaps in coverage</li>
 						<li class="fragment">determine what can not be tested</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>What is Protractor.js</h2>
-					<ul>
-						<li>build on Selenium / Webdriver</li>
-						<li>uses Jasmine syntax</li>
-						<li>based on asynchronous programming and promises</li>
 					</ul>
 				</section>
 
