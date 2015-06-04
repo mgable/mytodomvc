@@ -16,17 +16,17 @@ function hasClass(element, cls) {
 
 describe("Todo MVC", function(){
 	//1.0
-	xit("should enter a todo", function(){ 
+	it("should enter a todo", function(){ 
 		var inputField = element(by.model("newTodo"));
 		expect(inputField.isPresent()).toBeTruthy(); //1.1
 		inputField.sendKeys("write a new review");
 		inputField.getAttribute('value').then(function(inputtext){
-			expect(inputtext).toEqual("write a new review"); //1.1
+			expect(inputtext).toEqual("write a new review"); //1.2
 		});
 	});
 
 	//2.0
-	xit("should save a todo", function(){
+	it("should save a todo", function(){
 		var inputField = element(by.model("newTodo")),
 			todos = element.all(by.repeater("todo in todos"));
 		inputField.sendKeys("write a new review");
@@ -41,7 +41,7 @@ describe("Todo MVC", function(){
 	});
 
 	//3.0
-	xit("should edit a todo", function(){
+	it("should edit a todo", function(){
 		var todos = element.all(by.repeater("todo in todos")), 
 			firstTodo = todos.first(),
 			firstTodoInput = firstTodo.element(by.css("label")),
@@ -78,7 +78,7 @@ describe("Todo MVC", function(){
 	});
 
 	//4.0
-	xit("should toggle the 'complete' attribute of an individual todo", function(){
+	it("should toggle the 'complete' attribute of an individual todo", function(){
 		var todos = element.all(by.repeater("todo in todos"));
 		hasClass(todos.first(), "completed").then(function(isCompleted){
 			if (isCompleted){
@@ -96,7 +96,7 @@ describe("Todo MVC", function(){
 	});
 
 	//5.0
-	xit("should toggle the 'complete' attribute of all todos'", function(){
+	it("should toggle the 'complete' attribute of all todos'", function(){
 		element.all(by.repeater("todo in todos")).count().then(function(currentCount){
 			element.all(by.css(".completed")).count().then(function(completeCount){
 				element(by.css("#toggle-all")).click();
@@ -116,7 +116,7 @@ describe("Todo MVC", function(){
 	});
 
 	//6.0
-	xit("should delete a todo", function(){
+	it("should delete a todo", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			originalTodos;
 		todos.map(function(todo){
@@ -140,7 +140,7 @@ describe("Todo MVC", function(){
 	});
 
 	//7.0
-	xit("should delete all completed todos", function(){
+	it("should delete all completed todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
@@ -197,7 +197,7 @@ describe("Todo MVC", function(){
 	});
 
 	//8.0
-	xit("should display the number of 'active' todos", function(){
+	it("should display the number of 'active' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
@@ -241,11 +241,8 @@ describe("Todo MVC", function(){
 		});
 	});
 
-<<<<<<< HEAD
 	//9.0
-=======
->>>>>>> 55581c242ebf2ea4ffabb6b0ea7a589e94b0e591
-	xit("should filter by 'active' todos", function(){
+	it("should filter by 'active' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
@@ -321,76 +318,6 @@ describe("Todo MVC", function(){
 			});
 		});
 	});
-<<<<<<< HEAD
-=======
-	
-	xit("should filter by 'completed' todos", function(){
-		var todos = element.all(by.repeater("todo in todos")),
-			firstTodo = todos.first(),
-			inputField = element(by.model("newTodo"));
-
-		todos.count().then(function(count){
-			if (count){
-				todos.each(function(todo){
-					hasClass(todo, "completed").then(function(isCompleted){
-						if (!isCompleted){
-							todo.element(by.css("input.toggle")).click();
-						}
-					});
-				}).then(function(){
-					element(by.css("#clear-completed")).click();
-				});
-			} 
-
-			todos.count().then(function(count){
-				expect(count).toBe(0);
-			});
-
-			expect(element(by.css("#todo-count")).isDisplayed()).toBeFalsy();
-
-			inputField.sendKeys("write a new review");
-			inputField.sendKeys(protractor.Key.ENTER);
-
-			todos.count().then(function(count){
-				expect(count).toBe(1);
-			});
-
-			element(by.css("#todo-count")).getText().then(function(text){
-				expect(parseInt(text)).toBe(1);
-			});
-
-			inputField.sendKeys("write a new review");
-			inputField.sendKeys(protractor.Key.ENTER);
-
-			todos.count().then(function(count){
-				expect(count).toBe(2);
-			});
-
-			element(by.css("#todo-count")).getText().then(function(text){
-				expect(parseInt(text)).toBe(2);
-			});
-
-			todos.first().element(by.css("input.toggle")).click();
-			todos.count().then(function(count){
-				expect(count).toBe(2);
-			});
-
-			element(by.css("#todo-count")).getText().then(function(text){
-				expect(parseInt(text)).toBe(1);
-			});
-
-			element(by.cssContainingText('#filters li a', 'Completed')).click();
-
-			element(by.css("#todo-count")).getText().then(function(text){
-				expect(parseInt(text)).toBe(1);
-			});
-
-			todos.count().then(function(count){
-				expect(count).toBe(1);
-			});
-		});
-	});
->>>>>>> 55581c242ebf2ea4ffabb6b0ea7a589e94b0e591
 })
 
 		

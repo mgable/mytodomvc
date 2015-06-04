@@ -33,7 +33,8 @@
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
 		<style>
-			ol ul li {font-size:75% !important; color: red;}
+			ol ul li,  ol ol li{font-size:75% !important; color: red;}
+			ol ol li {list-style-type: lower-alpha;}
 		</style>
 	</head>
 
@@ -56,7 +57,11 @@
 					<p>Mark Gable</p>
 					<ul>
 						<li>I have worked in the industry since its inception</li>
-						<li>I currently work for <a href="http://www.marketshare.com" target="_blank" >Marketshare</a> a "big data" analytics company</li>
+						<li>I currently work for <a href="http://www.marketshare.com" target="_blank" >Marketshare</a> 
+							<ul>
+								<li>a "big data" analytics company</li>
+							</ul>
+						</li>
 						<li>Senior UI Architect and Engineer</li>
 					</ul>
 				</section>
@@ -74,11 +79,11 @@
 				<section>
 					<h2>What is End to End (E2E) testing</h2>
 					<ul>
+						<li>is not unit testing</li>
 						<li>tests a complete workflow</li>
 						<li>based on performing an action and testing the results</li>
 						<li>user centric</li>
 						<li>primary way to regression test</li>
-						<li>is not unit testing</li>
 					</ul>
 				</section>
 
@@ -185,8 +190,108 @@
 				</section>
 
 				<section>
-					<h2>The test application</h2>
-					<p>TODO MVC project - Angular version</p>
+					<section>
+						<h2>The test application</h2>
+						<p><a href="http://todomvc.com/examples/angularjs/#/" target="_blank">TODO MVC project - Angular version</a></p>
+					</section>
+					<section>
+						<h2>Functional Specifications</h2>
+						<p>The Todos application should:</p>
+						<ol style="font-size:smaller">
+							<li>enter a todo</li>
+							<li>save a todo</li>
+							<li>edit a todo</li>
+							<li>toggle the "complete" attribute of an individual todo</li>
+							<li>toggle the "complete" attribute of all todos</li>
+							<li>delete a todo</li>
+							<li>delete all "completed" todos</li>
+							<li>display the number of "active" todos</li>
+							<li>filter "active" todos</li>
+							<li>filter "completed" todos</li>
+							<li>display "all" todos</li>
+						</ol>
+					</section>
+					<section>
+						<ol>
+							<li>enter a todo
+								<ol>
+									<li>input field is present</li>
+									<li>input field accepts user input</li>
+								</ol>
+							</li>
+							<li>save a todo
+								<ol>
+									<li>places a new todo into the last index position of the todo list</li>
+									<li>clears the input field</li>
+								</ol>
+							</li>
+							<li>edit a todo
+								<ol>
+									<li>double-click a todo to edit</li>
+									<li>ESC keypress reverts the input field to unmodified value</li>
+									<li>RETURN keypress updates todo with input field text</li>
+								</ol>
+							</li>
+							<li>toggle the "complete" attribute of an individual todo
+								<ol>
+									<li>mark an "active" todo as "complete"</li>
+									<li>mark a "complete" todo as "active"</li>
+								</ol>
+							</li>
+							<li>toggle the "complete" attribute of all todos
+								<ol>
+									<li>mark all todos as "complete" if there is at least one "active" todo</li>
+									<li>mark all todos as "active" if all todos are "completed"</li>
+								</ol>
+							</li>
+						</ol>
+					</section>
+
+					<section>
+						<ol start='6'>
+							<li>delete a todo
+								<ol>
+									<li>removes a todo from the todo list</li>
+								</ol>
+							</li>
+							<li>delete all completed todos
+								<ol>
+									<li>remove button is visible when todo list contains "completed" todos</li>
+									<li>remove button is not visible when todo list contains "completed" todos</li>
+									<li>removes all "completed" todos from the todo list </li>
+								</ol>
+							</li>
+							<li>display the number of "active" todos
+								<ol>
+									<li>hide todo-count when there are no todos</li>
+									<li>todo-count displays number of "active" todos</li>
+									<li>a todo should be "active" when first created</li>
+									<li>a todo should not "active" when marked "completed"</li>
+								</ol>
+							</li>
+							<li>filter "active" todos
+								<ol>
+									<li>todo-count displays number of "active" todos</li>
+									<li>display only "active" todos</li>
+								</ol>
+							</li>
+						</ol>
+					</section>
+					<section>
+						<ol start="10">
+							<li>filter "completed" todos
+								<ol>
+									<li>todo-count displays number of "completed" todos</li>
+									<li>display only "completed" todos</li>
+								</ol>
+							</li>
+							<li>display "all" todos
+								<ol>
+									<li>11.1 ?</li>
+								</ol>
+							</li>
+						</ol>
+					</section>
 				</section>
 
 				<section>
