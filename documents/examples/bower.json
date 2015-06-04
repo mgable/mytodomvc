@@ -1,0 +1,18 @@
+{
+  "name": "drop down menu example",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mgable/mytodomvc",
+  "authors": [
+    "Mark Gable <mgable@marketshare.com>"
+  ],
+  "description": "visual for Protractor presentation",
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
