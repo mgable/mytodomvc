@@ -1,0 +1,152 @@
+####Writing Effective E2E Tests Using Angular And Protractor
+
+**Audience:** The intended audience of this report is mid to senior level developers, QA engineers and product managers.
+
+####What this report is about:
+This report is an exploration of writing Scenario (AKA End-to-End or E2E) tests for an Angular application (SPA) using Protractor.js. The primary focus is an overview of the strategies and concerns behind writing effective E2E tests. It is not about installing, setting up or learning Protractor.js; there are plenty of tutorials which cover that subject extensively.
+
+####What is end to end testing:
+End-to-end testing (E2E) is a technique used to test whether the user interaction for a specific task from start to finish behaves as expected. More specifically, it tests an application’s behavior, as directed by a set of instructions, as if a user was interacting with the application directly. Generally the tests would never interact with the application code, relying on the UI for all feedback.
+
+This differs from Unit Testing in unit tests work directly with the code itself and not through the user interface. Unit test are low level, operating on smallest unit, looking for issues in the code itself. E2E testing is not interested in the code but the outcome of user actions. Unit testing is developer centric whereas E2E tests are user centric.
+
+E2E testing is also the primary way to implement regression testing and insuring that what once worked is still working as expected.
+	
+####Types of E2E tests:
+When designing an overall E2E test strategy it is useful to think of the different workflows through the UI and the possible user interactions with it. These workflows can be measured in different ways and this will effect the way tests are written.
+
+For example, lets take a simple case of an SPA which consists of a drop down menu. We can test it for rendering - did it render the correct label and form field (or other markup); we can test it for behavior - does the menu expand when clicked, and highlight on hover, etc; we can test it for data - does it contain the correct menu items; and we can test if for performance - does it render within acceptable limits. 
+
+Rendering tests if a static element rendered on the page. Rendering tests are very straight forward in the simply test for the existence of a static element on the page. The test are easy to write and will not be covered in this report. 
+
+Behavioral tests if the element behaves in the intended way. Behavioral tests are much more complex as they can have data dependencies and involve state. In devising an E2E testing strategy, these two issues (state and data) need to be addressed and handled in a uniform way. Behavior tests are what this report will be focusing on.
+
+Data tests if the rendered data correct. Data tests can be very problematic if you can not get direct access to the data source. How do we know if the drop down has the correct items if we can not compare the output of the drop down to its data source? Writing data tests has its own unique set of issues and will be covered in another report.
+
+Performance tests if the response times are within acceptable limits. Because “performance” is subjective, to start performance testing expectations on time limits for any given task need to be established. These times might very depending on a complex set of factors and will be different for each test. Determining the performance requirements is a nontrivial task and is beyond the scope of this report.
+
+####What is Protractor.js
+Protractor is an end-to-end test framework for AngularJS applications (although it can be used for non-Angular applications as well). Protractor runs tests against your application running in a real browser, interacting with it as a user would.
+
+Protractor tests are written as a series of instructions which tell the browser to do tasks just like a human user would - click here, enter text there, click again, scroll down, wait, go to a new page, etc. Any behavior a human can input into the browser, so can a Protractor E2E test.
+
+Protractor tests are written using Jasmine syntax and connects to the browser using Selenium’s Webdriver.js. Jasmine is a javascript unit testing framework which has a clean syntax so you can easily write tests. To be able to write Protractor tests you must understand Jasmine.
+
+####E2E testing strategies:
+Before writing the first line of code, it is beneficial to determine the critical aspects of the application to formulate an overall strategy. Performance and rending may be important, however they are not as important as behavior and data. It may be that certain functional areas have different considerations; the initial view of the application must render in under 250 ms, however other views do not have that restriction. Some widget might have and unknown state with unknown data and therefore impossible to accurately test. Tests which check for something that never changes (e.g. the page title) should take a lower priority than tests which check application critical behavior (e.g. form interaction). For each workflow through the application determine which aspect needs to be tested and what type of test it will need (i.e. rendering, behavioral, data or performance). 
+
+During product development, it is typical to write functional specifications or user stories which describe the behavior of the application. These user stories are then used as the guide to program behavior. Since it is this behavior we want to test, it makes sense to use the functional specifications as the basis of writing the tests.
+
+To illustrate, lets say we have an application which queries the user for a “name”. The application has the following user story and requirements.
+
+When the submit button is pressed
+1. the name is required
+2. the name must have a minimum of two characters
+3. the name has a maximum of 256 characters
+4. the name can not have the following characters: \ / ? : * 
+5. the name has to be unique within the system
+6. the name is submitted to the server
+
+The first five of these requirements are very straight forward behavioral tests. However, 5 and 6 sounds like a data tests, or at least involves application data, in how can we test for a unique name if we do not know all the names to compare to, and for 6, the only way to know the name was submitted is to query the server (or data store) and find out if the name is there.
+
+Working with application data can be problematic for several reasons. First, the tests may not have access to the data store; browser local and session storage is private, for instance. For this reason I would avoid combining data tests with behavior tests. So then how do we deal with requirements 5 and 6? Obviously the user stories are just a description of what is required, not a prescription on how to do it. If we think in prescriptive terms in the way the applications works we can write all tests as behavior tests, abet with some gaps in coverage. In other words, interpret the functional specification into the actual manifestation of the behavior.
+
+So lets modified the users stories slightly by adding the actual implementation details
+1. the name is required
+	- the submit button is disabled when the name field is empty
+2. the name must have a minimum of two characters
+	- the submit button is disabled if the name is less than two characters
+3. the name has a maximum of 256 characters
+	- the submit button is disabled if the name is more than 256 characters
+4. the name can not have the following characters: \ / ? : * 
+	- the submit button is disabled if it contains any of the restricted characters
+5. the name has to be unique within the system
+	- enter a unique name
+	- the submit button is disabled if the same unique name is entered again
+6. the name is submitted to the server
+	- if a name passes all the above tests, the submit button is enabled
+
+Using functional specifications in this manner is like using Interfaces in Java; the specs defines the interaction but leaves the actual implementation to the developer.
+
+As you can see it is possible to rewrite all tests to be behavior tests. Obviously, there is a gap of coverage in 6 in we are not truly able to know if the data was captured by the server. However those data tests should be performed separately from the behavior tests, in that they have different requirements to execute.
+
+Another point to note, 5 creates data and therefore modifies the state of the application. Handling data and state are two very important concerns which should be decided on before starting to write tests. Can (should) tests create their own data? In some instances you might not be able to pollute the application with test data. If this is the case, I would strongly suggest getting a separate test instance of the app, server and data store. However, depending on many enterprise level details, this might not be possible: the data base is just too big or the app build and deploy process does not support a QA instance. Barring a QA instance, it is possible to have a HTTP client like Charles, block all data changing API calls and route them somewhere else to test. 
+
+Changing the application’s data also changes its state. You might have an application that has an initial state and has behavior unique to that  state. Once the application is tested, that initial state is changed and therefore the behavior is changed as well. For example, an application when first used has a set up workflow and once that is completed, it will never show up again. If the tests are not state aware and are always expecting (or not expecting) a set up workflow, those tests will fail.
+
+It is critical to make your tests state aware, but what to do about an application which may be in any state when tested. If there is not a way to reset the application to the same state each time it is tested, and it is possible for the for tests to change state and data, you can pre configure the application to a known state before starting the tests. Extending the above example, say the application is taking in a list of names and when tested it is not known if any names have currently been entered and this effects the initial state of the application. If we always delete all names prior to testing we always know no names have currently been entered and therefore insuring a consistent initial state.
+
+The test application: TODO MVC
+To more throughly explore the concepts in this report, lets actually develop and write E2E tests for a real web application. The Angular version [TODO MVC project](http://todomvc.com/examples/angularjs/#/) makes an excellent test case.
+	
+Using the Angular TODO application as the test case, lets determine what behavior should be tested. The development cycle of most products probably includes the product manager composing users stories or product functional specifications. If those exist, use them. If not, back into them by writing them yourself. Since no functional specifications for the TODO app are available, we will write them ourselves.
+
+The Todos application should:
+- enter a todo
+- save a todo
+- edit a todo
+- toggle the "complete" attribute of an individual todo
+- toggle the "complete" attribute of all todos
+- delete a todo
+- delete all completed todos
+- display the number of "active" todos
+- filter "active" todos
+- filter "completed" todos
+- display "all" todos
+
+Obviously this is just descriptive behavior, lets fill it in with the prescriptive details on what constitutes a test for the behavior. Also lets add a numbering system to help organize things.
+
+The Todos application should:
+1. enter a todo
+	- 1.1 input field is present
+	- 1.2 input field accepts user input
+2. save a todo
+	- 2.1 places a new todo into the last index position of the todo list
+	- 2.2 clears the input field
+3. edit a todo
+	- 3.1 double-click a todo to edit
+	- 3.2 ESC keypress reverts the input field to unmodified value
+	- 3.3 RETURN keypress updates todo with input field text
+4. toggle the "complete" attribute of an individual todo
+	- 4.1 mark an "active" todo as "complete"
+	- 4.2 mark a "complete" todo as "active"
+5. toggle the "complete" attribute of all todos
+	- 5.1 mark all todos as "complete" if there is at least one "active" todo
+	- 5.2 mark all todos as "active" if all todos are "completed"
+6. delete a todo
+	- 6.1 removes a todo from the todo list
+7. delete all “completed” todos
+	- 7.1 remove button is visible when todo list contains "completed" todos
+	- 7.2 remove button is not visible when todo list contains "completed" todos
+	- 7.3 removes all "completed" todos from the todo list 
+8. display the number of "active" todos
+	- 8.1 hide todo-count when there are no todos
+	- 8.2 todo-count displays number of "active" todos
+	- 8.3 a todo should be "active" when first created
+	- 8.4 a todo should not "active" when marked "completed"
+9. filter "active" todos
+	- 9.1 todo-count displays number of "active" todos
+	- 9.2 display only "active" todos
+10. filter "completed" todos
+	- 10.1 todo-count displays number of "completed" todos
+	- 10.2 display only "completed" todos
+11.  display "all" todos
+	- 11.1 ?
+
+Notice most of the stories have multiple criteria for success. We will see how this works perfectly with Protractor / Jasmine syntax to write tests.
+
+Because the implementation of the Angular TODO MVC we are testing uses local storage which is problematic to get at, no data tests can be conducted. When designing tests this fact is of paramount concern. How much coverage is available using only behavior tests? What to do about tests which need specific data, such as 6.0? If there are no todos to delete, how can a delete test be performed? The answer is the test must create a todo so it can then delete it. The same is true for most of the tests, they need some data to work on and at the launch of the application we have no idea whether or not any todos are available to test against.
+
+One note of caution about tests creating data - each test should create the data that specific test needs and not rely on a prior test creating that data. For instance, a clever programmer might see that test 1.0 creates the todo, 2.0 saves the todo, 3.0 can edit that same todo. Test 4.0 and 6.0 can also work on that same todo. Except if test 1.0 fails and does not create the necessary todo, then depending if there is another todo already in the list, all of those subsequent tests which depend on the todo will also fail whether their implemented behavior actually works or not. Another reason not to let tests create data for other tests is it limits the ability to execute a single test. Using the example, lets say we let test 1.0 create the todo which will be used in tests 2.0, 3.0, 4.0, 6.0 and so on. If one of the tests fail you must rerun them all adding to the time it takes to execute. If each test stands alone, you can run that single test, making trouble shooting much easier and faster.
+
+Aside from data, application state is another concern. What state will the application be in when tested and how will the tests alter that state. The state of the Angular TODO MVC is determined by the number of “todos” and the individual state of each “todo”. Since testing will add, edit and delete todos, the tests will be altering the state of the application. Does this matter? Yes and no. Yes - it matters because any state change has the potential to alter a test; and no - it does not matter because we can write our tests in a way to minimize or negate state issues.
+
+Unlike unit tests which can be used to develop an application using BDD or TDD, any good E2E test writing should not involve having to change application code and happens after development when the UI is stable. It may be possible to use E2E tests in a TDD or BDD environment however because Protractor depends heavily on selectors, which are completely UI based, any changes to the UI no matter how subtle has the potential to break tests. Because of this dependency on the UI, E2E tests can be very brittle.
+
+####The tests:
+Jasmine generalized format is to describe the test; define the specifications; then test the expectation. For example consider the drop down menu. The description would be “the drop down menu”, a specification would be it “should expand when clicked”; and the expectation is when the element is clicked it expands. It is the expectation which needs the most interpretation - what does it mean for a drop down menu to be “expanded”. Typically an expanded menu has an additional class applied to it which it would not have in its collapsed state. The test can check for this additional class, however this does not tell us if the menu is actually expanded. A more precise test would be to determine if the elements of the expanded drop down menu are actually visible (displayed) on the page. However this solution is not without its issues either. Application state or data issues might effect the items contained in the drop down making it impossible to know what should be displayed. For example, a drop down might be populated with user entered data, and the application in its initial state does not have that data so the drop down is not populated. After data is entered the drop down is further populated making its exact contents depend on application data. And, as we know data tests have their own issues.
+
+One other important consideration is since all browser operations are asynchronous, Protractor and Jasmine rely completely on the Promise interface for communications. This can add an additional level of complexity as asynchronous programming can be tricky.
+
+####Conclusion:
+If releasing a quality product matters, you have to be testing prior to every release. The only thing worse than a regression bug, is when the client finds a regression bug. Long gone are the days of manual regression testing where college students and off-shore contractors manually click through your application checking for bugs. With Protractor these same tests can be scheduled automatically to run before the deploy process insuring a build free of regression bugs. 
