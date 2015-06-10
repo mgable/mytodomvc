@@ -35,6 +35,9 @@
 		<style>
 			ol ul li,  ol ol li{font-size:75% !important; color: red;}
 			ol ol li {list-style-type: lower-alpha;}
+			code {text-align: left;}
+			pre { word-wrap: normal !important;}
+			.red {color: red;}
 		</style>
 	</head>
 
@@ -79,20 +82,20 @@
 				<section>
 					<h2>What is End to End (E2E) testing</h2>
 					<ul>
-						<li>is not unit testing</li>
-						<li>tests a complete workflow</li>
-						<li>based on performing an action and testing the results</li>
-						<li>user centric</li>
-						<li>primary way to regression test</li>
+						<li class="fragment">is not unit testing</li>
+						<li class="fragment">tests a complete workflow</li>
+						<li class="fragment">based on performing an action and testing the results</li>
+						<li class="fragment">user centric</li>
+						<li class="fragment">primary way to regression test</li>
 					</ul>
 				</section>
 
 				<section>
 					<h2>What is Protractor.js</h2>
 					<ul>
-						<li>built on Selenium / Webdriver</li>
-						<li>uses Jasmine syntax</li>
-						<li>based on asynchronous programming model</li>
+						<li class="fragment">built on Selenium / Webdriver</li>
+						<li class="fragment">uses Jasmine syntax</li>
+						<li class="fragment">based on asynchronous programming model</li>
 					</ul>
 				</section>
 
@@ -295,7 +298,214 @@
 				</section>
 
 				<section>
-					<h2>The Tests</h2>
+					<section>
+						<h2>The Tests</h2>
+						<ul>
+							<li class="fragment">written using the Jasmine syntax</li>
+							<li class="fragment">asynchronous programming using promises</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Jasmine Syntax</h2>
+						<ul>
+							<li class="fragment"><code class="red">describe</code> the test</li>
+							<li class="fragment"><code class="red">it</code> should have specifications</li>
+							<li class="fragment"><code class="red">expect</code> the specifications to have some result</li>
+						</ul>
+						
+					</section>
+					<section>
+						<h2>Jasmine for Test 1.0</h2>
+						<ul>
+							<li class="fragment"><code class="red">describe</code> enter a todo</li>
+							<li class="fragment"><code class="red">it</code> should have an input field</li>
+							<li class="fragment"><code class="red">expect</code> the input field to be present</li>
+							<li class="fragment"><code class="red">it</code> should have an input field that accepts user data</li>
+							<li class="fragment"><code class="red">expect</code> data to be entered into the input field</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Jasmine for Test 1.0</h2>
+<code><pre><span class="red">describe</span>("The MVC app should enter a todo", function(){ 
+
+  // get a reference to the input field
+
+  <span class="red">it</span>("should have an input field", function(){
+    //1.1
+    <span class="red">expect</span> input field to be displayed
+  );
+	
+  // enter a todo
+
+  <span class="red">it</span>("should have an input field which expects user data", function(){
+      //1.2
+      <span class="red">expect</span> the input field to equal todo
+    });
+  });
+});
+</pre></code>
+					</section>
+					<section>
+						<h2>Jasmine for Test 1.0</h2>
+<code><pre>describe("The MVC app should enter a todo", function(){ 
+
+  <span class="red">var inputField = element(by.model("newTodo"));</span>
+
+  it("should have an input field", function(){
+    //1.1
+    <span class="red">expect(inputField.isPresent()).toBeTruthy();</span>
+  );
+	
+  <span class="red">inputField.sendKeys("write a new review");</span>
+
+  it("should have an input field which expects user data", function(){
+    <span class="red">inputField.getAttribute('value').then(function(inputtext){
+      //1.2
+      expect(inputtext).toEqual("write a new review");
+    });</span>
+
+  });
+});
+</pre></code>
+					</section>
+					<section>
+						<h2>Jasmine for Test 2.0</h2>
+						<ul>
+							<li class="fragment"><code><span class="red">describe</span></code> save a todo</li>
+							<li class="fragment"><code><span class="red">it</span></code> places the new todo into the last index position of the todo list</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the new todo in the last index position</li>
+							<li class="fragment"><code><span class="red">it</span></code> clears the input field</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the input field to be empty</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Jasmine for Test 2.0</h2>
+<code><pre><span class="red">describe</span>("The MVC app should save a todo", function(){ 
+
+  // get a reference to the input field
+  // get a reference to the list of todos
+  // enter a todo
+
+  <span class="red">it</span>("should put the todo in the last index position", function(){
+    //2.1
+    <span class="red">expect</span> the last todo to be the entered todo
+  );
+  <span class="red">it</span>("should clear the input field", function(){
+      //2.2
+      <span class="red">expect</span> the input field to be empty;
+    });
+  });
+});
+</pre></code>
+					</section>
+					<section>
+						<h2>Jasmine for Test 2.0</h2>
+<code><pre>describe("The MVC app should enter a todo", function(){ 
+
+  <span class="red">var inputField = element(by.model("newTodo")),
+    todos = element.all(by.repeater("todo in todos"));
+  inputField.sendKeys("write a new review" + protractor.Key.ENTER));</span>
+
+  it("should put the todo in the last index position", function(){
+    <span class="red">todos.last().getText().then(function(text){
+      //2.1
+      expect(text).toEqual("write a new review");
+    });</span>
+  );
+
+  it("should clear the input field", function(){
+    <span class="red">inputField.getAttribute('value').then(function(inputtext){
+      //2.2
+      expect(inputtext).toEqual(""); 
+    });</span>
+  });
+});
+</pre></code>
+					</section>
+
+
+					<section>
+						<h2>Jasmine for Test 3.0</h2>
+						<ul>
+							<li class="fragment"><code><span class="red">describe</span></code> edit a todo</li>
+							<li class="fragment"><code><span class="red">it</span></code> should double-click a todo to edit</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the first todo to have class 'editing'</li>
+							<li class="fragment"><code><span class="red">it</span></code> should revert the input field to original value when the ESC is pressed</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the input field to be original value when ESC is pressed</li>
+							<li class="fragment"><code><span class="red">it</span></code> should update the input field to new value when the RETURN is pressed</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the input field to be new value when RETURN is pressed</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Jasmine for Test 3.0</h2>
+<code><pre><span class="red">describe</span>("The MVC app should edit a todo", function(){ 
+
+  // get a reference to the list of todos
+  // get a reference to the first todo
+  // get a reference to the first todo's input field
+  // if there are todos then get the first one text value
+  // double-click the first todos input field
+  <span class="red">it</span>("should double-click a todo to edit", function(){
+    <span class="red">expect</span> the first todo to have class 'editing' //3.1 
+  });
+  // edit the todo
+  // press ESC
+  <span class="red">it</span>("should revert todo to original value when the ESC is pressed", function(){
+      <span class="red">expect</span> the input field to be original value; //3.2 
+    });
+  });
+  // edit the todo
+  // press RETURN
+  <span class="red">it</span>("should update todo to new value when the RETURN is pressed", function(){
+      <span class="red">expect</span> the input field to be new value when RETURN is pressed; //3.2 
+    });
+  });
+
+});
+</pre></code>
+					</section>
+					<section>
+						<h2>Jasmine for Test 3.0</h2>
+<code><pre>describe("should edit a todo", function(){
+  <span class="red">// get references
+  todos.count().then(function(count){
+    if (count){
+      firstTodoInput.getText().then(function(text){
+        title = text;</span>
+        it ("should double-click a todo to edit", function(){
+          <span class="red">browser.actions().doubleClick(firstTodo).perform();
+          hasClass(firstTodo,"editing").then(function(hasClass){
+            expect(hasClass).toBe(true); //3.1
+          });
+        });</span>
+        it ("should revert when ESC is pressed", function(){
+         <span class="red"> browser.actions().sendKeys(" -xxx" + protractor.Key.ESCAPE).perform();
+          firstTodoInput.getText().then(function(text){
+            expect(text).toEqual(title); //3.2
+          });
+        });</span>
+        it ("should update when RETURN is pressed", function(){
+          <span class="red">browser.actions().doubleClick(firstTodo).perform();
+          browser.actions().sendKeys(" -new" + protractor.Key.ENTER).perform();
+          firstTodoInput.getText().then(function(newTitle){
+            expect(newTitle).toEqual(title + " -new"); //3.3
+          });
+        });
+    } else { // rest of code </span>
+
+</pre></code>
+					</section>
+				</section>
+
+				<section>
+					<h2>Data and State</h2>
+					<ul>
+						<li class="fragment">presume an inital state</li>
+						<li class="fragment">make data as needed</li>
+						<li class="fragment">test should make their own data</li>
+						<li class="fragment">if possible, clean up after tests</li>
+					</ul>
 				</section>
 
 				<section>

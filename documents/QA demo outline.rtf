@@ -9,13 +9,15 @@
 \pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 \cf0 \
 Audience:\
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b0 The intended audience of this report is mid to senior level developers, QA engineers and product managers.
+\b0 \cf0 The intended audience of this report is mid to senior level developers, QA engineers and product managers.
 \b \
 
 \b0 \
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b What this report is about:
+\b \cf0 What this report is about:
 \b0 \
 This report is an exploration of writing Scenario (AKA End-to-End or E2E) tests for an Angular application (SPA) using Protractor.js. The primary focus is an overview of the strategies and concerns behind writing effective E2E tests. It is not about installing, setting up or learning Protractor.js; there are plenty of tutorials which cover that subject extensively. Nor is the report about the writing the tests code, although we will be looking at code.\
 \
@@ -50,15 +52,17 @@ Performance tests if the response times are within acceptable limits. Because \'
 \
 
 \b What is Protractor.js\
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b0 Protractor is an end-to-end test framework for AngularJS applications (although it can be used for non-Angular applications as well). Protractor runs tests against your application running in a real browser, interacting with it as a user would.\
+\b0 \cf0 Protractor is an end-to-end test framework for AngularJS applications (although it can be used for non-Angular applications as well). Protractor runs tests against your application running in a real browser, interacting with it as a user would.\
 \
 Protractor tests are written as a series of instructions which tell the browser to do tasks just like a human user would - click here, enter text there, click again, scroll down, wait, go to a new page, etc. Any behavior a human can input into the browser, so can a Protractor E2E test.\
 \
 Protractor tests are written using Jasmine syntax and connects to the browser using Selenium\'92s Webdriver.js. Jasmine is a javascript unit testing framework which has a clean syntax so you can easily write tests. To be able to write Protractor tests you must understand Jasmine.\
 \
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b E2E testing strategies:\
+\b \cf0 E2E testing strategies:\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
 \b0 \cf0 Before writing the first line of code, it is beneficial to determine the critical aspects of the application to formulate an overall strategy. Performance and rending may be important, however they are not as important as behavior and data. It may be that certain functional areas have different considerations; the initial view of the application must render in under 250 ms, however other views do not have that restriction. Some widget might have and unknown state with unknown data and therefore impossible to accurately test. Tests which check for something that never changes (e.g. the page title) should take a lower priority than tests which check application critical behavior (e.g. form interaction). For each workflow through the application determine which aspect needs to be tested and what type of test it will need (i.e. rendering, behavioral, data or performance). \
@@ -107,8 +111,9 @@ Changing the application\'92s data also changes its state. You might have an app
 \
 It is critical to make your tests state aware, but what to do about an application which may be in any state when tested. If there is not a way to reset the application to the same state each time it is tested, and it is possible for the for tests to change state and data, you can pre configure the application to a known state before starting the tests. Extending the above example, say the application is taking in a list of names and when tested it is not known if any names have currently been entered and this effects the initial state of the application. If we always delete all names prior to testing we always know no names have currently been entered and therefore insuring a consistent initial state.\
 \
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b The test application: TODO MVC
+\b \cf0 The test application: TODO MVC
 \b0 \
 To more throughly explore the concepts in this report, lets actually develop and write E2E tests for a real web application. The Angular version TODO MVC project makes an excellent test case - {\field{\*\fldinst{HYPERLINK "http://todomvc.com/examples/angularjs/#/"}}{\fldrslt http://todomvc.com/examples/angularjs/#/}}\
 	\
@@ -166,9 +171,9 @@ The Todos application should:\
 11.0  display "all" todos\
 	11.1 ?\
 \
-Determining the correct granularity for the tests can be challenging. I would suggest writing out every step possible and then combining tests as duplications in the actual implementation arise. Notice most of the stories have multiple criteria for success. We will see how this works perfectly with Protractor / Jasmine syntax to write tests.\
+Notice most of the stories have multiple criteria for success. We will see how this works perfectly with Protractor / Jasmine syntax to write tests.\
 \
-Because the implementation of the Angular TODO MVC we are testing against uses local storage and that is problematic to get at, no data tests can be conducted. When designing tests this fact is of paramount concern. How much coverage is available using only behavior tests? What to do about tests which need specific data, such as 6.0? If there are no todos to delete, how can a delete test be performed? The answer is the test must create a todo so it can then delete it. The same is true for most of the tests, they need some data to work on and at the launch of the application we have no idea whether or not any todos are available to test against.\
+Because the implementation of the Angular TODO MVC we are testing uses local storage which is problematic to get at, no data tests can be conducted. When designing tests this fact is of paramount concern. How much coverage is available using only behavior tests? What to do about tests which need specific data, such as 6.0? If there are no todos to delete, how can a delete test be performed? The answer is the test must create a todo so it can then delete it. The same is true for most of the tests, they need some data to work on and at the launch of the application we have no idea whether or not any todos are available to test against.\
 \
 One note of caution about tests creating data - each test should create the data that specific test needs and not rely on a prior test creating that data. For instance, a clever programmer might see that test 1.0 creates the todo, 2.0 saves the todo, 3.0 can edit that same todo. Test 4.0 and 6.0 can also work on that same todo. Except if test 1.0 fails and does not create the necessary todo, then depending if there is another todo already in the list, all of those subsequent tests which depend on the todo will also fail whether their implemented behavior actually works or not. Another reason not to let tests create data for other tests is it limits the ability to execute a single test. Using the example, lets say we let test 1.0 create the todo which will be used in tests 2.0, 3.0, 4.0, 6.0 and so on. If one of the tests fail you must rerun them all adding to the time it takes to execute. If each test stands alone, you can run that single test, making trouble shooting much easier and faster.\
 \
@@ -187,6 +192,7 @@ One other important consideration is since all browser operations are asynchrono
 
 \b \
 Conclusion:\
+\pard\tx376\tx725\tx1088\tx1440\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
 
-\b0 If releasing a quality product matters, you have to be testing prior to every release. The only thing worse than a regression bug, is when the client finds a regression bug. Long gone are the days of manual regression testing where college students and off-shore contractors manually click through your application checking for bugs. With Protractor these same tests can be scheduled automatically to run before the deploy process insuring a build free of regression bugs. \
+\b0 \cf0 If releasing a quality product matters, you have to be testing prior to every release. The only thing worse than a regression bug, is when the client finds a regression bug. Long gone are the days of manual regression testing where college students and off-shore contractors manually click through your application checking for bugs. With Protractor these same tests can be scheduled automatically to run before the deploy process insuring a build free of regression bugs. \
 }
