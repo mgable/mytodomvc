@@ -14,7 +14,7 @@ function hasClass(element, cls) {
     });
 }
 
-describe("Todo MVC", function(){
+xdescribe("Todo MVC", function(){
 	//1.0
 	it("should enter a todo", function(){ 
 		// get reference to input field
