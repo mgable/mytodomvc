@@ -16,7 +16,7 @@ function hasClass(element, cls) {
 
 describe("Todo MVC", function(){
 	//1.0
-	xit("should enter a todo", function(){ 
+	it("should enter a todo", function(){ 
 		var inputField = element(by.model("newTodo"));
 		expect(inputField.isPresent()).toBeTruthy(); //1.1
 		inputField.sendKeys("write a new review");
@@ -26,7 +26,7 @@ describe("Todo MVC", function(){
 	});
 
 	//2.0
-	xit("should save a todo", function(){
+	it("should save a todo", function(){
 		var inputField = element(by.model("newTodo")),
 			todos = element.all(by.repeater("todo in todos"));
 		inputField.sendKeys("write a new review");
@@ -41,7 +41,7 @@ describe("Todo MVC", function(){
 	});
 
 	//3.0
-	xit("should edit a todo", function(){
+	it("should edit a todo", function(){
 		var todos = element.all(by.repeater("todo in todos")), 
 			firstTodo = todos.first(),
 			firstTodoInput = firstTodo.element(by.css("label")),
@@ -78,7 +78,7 @@ describe("Todo MVC", function(){
 	});
 
 	//4.0
-	xit("should toggle the 'complete' attribute of an individual todo", function(){
+	it("should toggle the 'complete' attribute of an individual todo", function(){
 		var todos = element.all(by.repeater("todo in todos"));
 		hasClass(todos.first(), "completed").then(function(isCompleted){
 			if (isCompleted){
@@ -96,7 +96,7 @@ describe("Todo MVC", function(){
 	});
 
 	//5.0
-	xit("should toggle the 'complete' attribute of all todos'", function(){
+	it("should toggle the 'complete' attribute of all todos'", function(){
 		element.all(by.repeater("todo in todos")).count().then(function(currentCount){
 			element.all(by.css(".completed")).count().then(function(completeCount){
 				element(by.css("#toggle-all")).click();
@@ -116,7 +116,7 @@ describe("Todo MVC", function(){
 	});
 
 	//6.0
-	xit("should delete a todo", function(){
+	it("should delete a todo", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			originalTodos;
 		todos.map(function(todo){
@@ -197,7 +197,7 @@ describe("Todo MVC", function(){
 	});
 
 	//8.0
-	xit("should display the number of 'active' todos", function(){
+	it("should display the number of 'active' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
@@ -242,7 +242,7 @@ describe("Todo MVC", function(){
 	});
 
 	//9.0
-	xit("should filter by 'active' todos", function(){
+	it("should filter by 'active' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
@@ -281,7 +281,7 @@ describe("Todo MVC", function(){
 	});
 	
 	//10.0
-	xit("should filter by 'completed' todos", function(){
+	it("should filter by 'completed' todos", function(){
 		var todos = element.all(by.repeater("todo in todos")),
 			firstTodo = todos.first(),
 			inputField = element(by.model("newTodo"));
