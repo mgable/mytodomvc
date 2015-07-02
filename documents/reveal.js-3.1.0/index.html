@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 
@@ -73,30 +74,31 @@
 				<section>
 					<h2>What this presentation is about</h2>
 					<ul>
-						<li class="fragment">Developing an effective E2E testing strategy</li>
-						<li class="fragment">Understanding the aspects of creating effective E2E tests</li>
-						<li class="fragment">Not about code but about writing good tests</li>
-						<li class="fragment">Not about installation, set up or learning Angular or Protractor</li>
+						<li>Developing an effective E2E testing strategy</li>
+						<li>Understanding the aspects of creating effective E2E tests</li>
+						<li>Not about code but about writing good tests</li>
+						<li>Not about installation, set up or learning Angular or Protractor</li>
 					</ul>
 				</section>
 
 				<section>
 					<h2>What is End to End (E2E) testing</h2>
 					<ul>
-						<li class="fragment">is not unit testing</li>
-						<li class="fragment">tests a complete workflow</li>
-						<li class="fragment">based on performing an action and testing the results</li>
-						<li class="fragment">user centric</li>
-						<li class="fragment">primary way to regression test</li>
+						<li>is not unit testing</li>
+						<li>tests a complete workflow</li>
+						<li>based on performing an action and testing the results</li>
+						<li>user centric</li>
+						<li>primary way to regression test</li>
 					</ul>
 				</section>
 
 				<section>
 					<h2>What is Protractor.js</h2>
 					<ul>
-						<li class="fragment">built on Selenium / Webdriver</li>
-						<li class="fragment">uses Jasmine syntax</li>
-						<li class="fragment">based on asynchronous programming model</li>
+						<li>Protractor is an end-to-end test framework for AngularJS applications.</li>
+						<li>built on Selenium / Webdriver</li>
+						<li>uses Jasmine syntax</li>
+						<li>based on asynchronous programming model</li>
 					</ul>
 				</section>
 
@@ -105,7 +107,7 @@
 						<h2>Developing an E2E testing strategy</h2>
 						<ul>
 							<li class="fragment">determine what to test</li>
-							<li class="fragment">determine when to test</li>
+							<li class="fragment">determine when to write the test</li>
 							<li class="fragment">determine aspects of behavior to test</li>
 						</ul>
 					</section>
@@ -186,9 +188,7 @@
 				<section>
 					<h2>Developing a E2E testing strategy</h2>
 					<ul>
-						<li>determine aspects of behavior to test</li>
-						<li>write tests based on functional specifications</li>
-						<li>strive for an application which is always in an uniform starting state</li>
+						<li>control state</li>
 						<li class="fragment">write tests to make data when needed</li>
 						<li class="fragment">write tests to stand alone</li>
 						<li class="fragment">determine gaps in coverage</li>
@@ -305,27 +305,27 @@
 					<section>
 						<h2>The Tests</h2>
 						<ul>
-							<li class="fragment">written using the Jasmine syntax</li>
-							<li class="fragment">asynchronous programming using promises</li>
+							<li>written using the Jasmine syntax</li>
+							<li>asynchronous programming using promises</li>
 						</ul>
 					</section>
 					<section>
 						<h2>Jasmine Syntax</h2>
 						<ul>
-							<li class="fragment"><code class="red">describe</code> the test</li>
-							<li class="fragment"><code class="red">it</code> should have specifications</li>
-							<li class="fragment"><code class="red">expect</code> the specifications to have some result</li>
+							<li><code class="red">describe</code> the test</li>
+							<li><code class="red">it</code> should have specifications</li>
+							<li><code class="red">expect</code> the specifications to have some result</li>
 						</ul>
 						
 					</section>
 					<section>
 						<h2>Jasmine for Test 1.0</h2>
 						<ul>
-							<li class="fragment"><code class="red">describe</code> enter a todo</li>
-							<li class="fragment"><code class="red">it</code> should have an input field</li>
-							<li class="fragment"><code class="red">expect</code> the input field to be present</li>
-							<li class="fragment"><code class="red">it</code> should have an input field that accepts user data</li>
-							<li class="fragment"><code class="red">expect</code> data to be entered into the input field</li>
+							<li><code class="red">describe</code> enter a todo</li>
+							<li><code class="red">it</code> should have an input field</li>
+							<li><code class="red">expect</code> the input field to be present</li>
+							<li><code class="red">it</code> should have an input field that accepts user data</li>
+							<li><code class="red">expect</code> data to be entered into the input field</li>
 						</ul>
 					</section>
 
@@ -373,11 +373,11 @@
 					<section>
 						<h2>Jasmine for Test 2.0</h2>
 						<ul>
-							<li class="fragment"><code><span class="red">describe</span></code> save a todo</li>
-							<li class="fragment"><code><span class="red">it</span></code> places the new todo into the last index position of the todo list</li>
-							<li class="fragment"><code><span class="red">expect</span></code> the new todo in the last index position</li>
-							<li class="fragment"><code><span class="red">it</span></code> clears the input field</li>
-							<li class="fragment"><code><span class="red">expect</span></code> the input field to be empty</li>
+							<li><code><span class="red">describe</span></code> save a todo</li>
+							<li><code><span class="red">it</span></code> places the new todo at the bottom of the todo list</li>
+							<li><code><span class="red">expect</span></code> the new todo in the last index position</li>
+							<li><code><span class="red">it</span></code> clears the input field</li>
+							<li><code><span class="red">expect</span></code> the input field to be empty</li>
 						</ul>
 					</section>
 					<section>
@@ -498,7 +498,7 @@
 					</section>
 				</section>
 
-				<section>
+<!-- 				<section>
 					<h2>Data and State</h2>
 					<ul>
 						<li class="fragment">presume an inital state</li>
@@ -506,7 +506,7 @@
 						<li class="fragment">test should make their own data</li>
 						<li class="fragment">if possible, clean up after tests</li>
 					</ul>
-				</section>
+				</section> -->
 
 				<section>
 					<h2>Conclusion</h2>
