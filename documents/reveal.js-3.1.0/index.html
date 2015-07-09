@@ -17,7 +17,6 @@
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css" id="theme">
-		<link rel="stylesheet" href="../../bower_components/components-font-awesome/css/font-awesome.css" />
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -40,9 +39,6 @@
 			code {text-align: left;}
 			pre { word-wrap: normal !important;}
 			.red {color: red;}
-			.reveal h2 {
-				text-transform: capitalize;
-			}
 		</style>
 	</head>
 
@@ -57,40 +53,22 @@
 					<h3>Writing Effective E2E Tests Using Angular And Protractor</h3>
 					<p>
 						<small>Presented by <a href="mailTo:mgable43@gmail.com">Mark Gable</a></small>
-						<small><a href="https://github.com/mgable/mytodomvc"><i class="fa-github fa"></i></a></small>
 					</p>
 				</section>
 
 				<section>
-					<section>
-						<h2>Who am I</h2>
-						<p><a href="https://www.linkedin.com/in/markgable" target="_blank">Mark Gable&nbsp;<i class="fa fa-linkedin-square"></i></a></p>
-						<ul>
-							<li>I have worked in the industry since its inception</li>
-							<li>I currently work for <a href="http://www.marketshare.com" target="_blank" >Marketshare</a> 
-								<ul>
-									<li>a "big data" analytics company</li>
-									<li>Senior UI Architect and Front End Engineer</li>
-								</ul>
-							</li>
-							
-						</ul>
-					</section>
-					<section>
-						<h2>Who am I</h2>
-						<p><a href="https://www.linkedin.com/in/markgable" target="_blank">Mark Gable&nbsp;<i class="fa fa-linkedin-square"></i></a></p>
-						<ul>
-							<li>I have worked in the industry since its inception</li>
-							<li>Shortly I will work for <a href="http://www.videoAmp" target="_blank" >VideoAmp</a> 
-								<ul>
-									<li>video advertising platform built from the ground up to buy, optimize and measure video ads across television, mobile and desktop.</li>
-									<li>Senior UI Architect and Front End Engineer</li>
-									<li class="fragment">We are hiring!</li>
-								</ul>
-							</li>
-							
-						</ul>
-					</section>
+					<h2>Who am I</h2>
+					<p>Mark Gable</p>
+					<ul>
+						<li>I have worked in the industry since its inception</li>
+						<li>I currently work for <a href="http://www.marketshare.com" target="_blank" >Marketshare</a> 
+							<ul>
+								<li>a "big data" analytics company</li>
+								<li>we are hiring!</li>
+							</ul>
+						</li>
+						<li>Senior UI Architect and Front End Engineer</li>
+					</ul>
 				</section>
 
 				<section>
@@ -171,7 +149,7 @@
 							<li>determine what to test</li>
 							<li>determine when to test</li>
 							<li>determine aspects of behavior to test</li>
-							<li>write tests based on functional specifications</li>
+							<li  class="fragment">write tests based on functional specifications</li>
 						</ul>
 					</section>
 					<section>
@@ -450,13 +428,13 @@
 					<section>
 						<h2>Jasmine for Test 3.0</h2>
 						<ul>
-							<li><code><span class="red">describe</span></code> edit a todo</li>
-							<li><code><span class="red">it</span></code> should double-click a todo to edit</li>
-							<li><code><span class="red">expect</span></code> the first todo to have class 'editing'</li>
-							<li><code><span class="red">it</span></code> should revert the input field to original value when the ESC is pressed</li>
-							<li><code><span class="red">expect</span></code> the input field to be original value when ESC is pressed</li>
-							<li><code><span class="red">it</span></code> should update the input field to new value when the RETURN is pressed</li>
-							<li><code><span class="red">expect</span></code> the input field to be new value when RETURN is pressed</li>
+							<li class="fragment"><code><span class="red">describe</span></code> edit a todo</li>
+							<li class="fragment"><code><span class="red">it</span></code> should double-click a todo to edit</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the first todo to have class 'editing'</li>
+							<li class="fragment"><code><span class="red">it</span></code> should revert the input field to original value when the ESC is pressed</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the input field to be original value when ESC is pressed</li>
+							<li class="fragment"><code><span class="red">it</span></code> should update the input field to new value when the RETURN is pressed</li>
+							<li class="fragment"><code><span class="red">expect</span></code> the input field to be new value when RETURN is pressed</li>
 						</ul>
 					</section>
 					<section>
@@ -531,7 +509,18 @@
 				</section> -->
 
 				<section>
-					<h2>Conclusion</h2>
+					<h2>Take-Aways</h2>
+					<ul>
+						<li class="fragment">Test only client facing applications</li>
+						<li class="fragment">begin writing after UAT</li>
+						<li class="fragment">base tests on functional specifications</li>
+						<li class="fragment">determine what is not covered</li>
+						<li class="fragment">control your application's state</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Questions</h2>
 				</section>
 
 				<!-- <section>
